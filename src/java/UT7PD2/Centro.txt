@@ -1,0 +1,60 @@
+﻿EJERCICIO 3
+- Obtener excentricidad
+
+    public Comparable obtenerExcentricidad(Comparable etiquetaVertice) {
+        if (existeVertice(etiquetaVertice)) {
+            Double[][] matrizFloyd = floyd();
+            IVertice vertice = buscarVertice(etiquetaVertice);
+            double excentricidad = 0;
+            int index = 0;
+            for (int i = 0; i < matrizFloyd[0].length; i++) {
+                if (vertice.equals(matrizFloyd[i])) {
+                    index = i;
+                    break;
+                }
+            }
+
+            for (int i = 0; i < matrizFloyd.length; i++) {
+                if (matrizFloyd[index][i] > excentricidad) {
+                    excentricidad = matrizFloyd[index][i];
+                }
+            }
+            return excentricidad;
+        }
+        return null;
+    }
+
+- Obtener centro del grafo
+
+    public Comparable centroDelGrafo() {
+        if (vertices.isEmpty()) {
+            return null;
+        }
+
+        Double[][] matrizFloyd = floyd();
+        Object[] etiquetas = getEtiquetasOrdenado();
+        Comparable centro = null;
+        double excentricidadMinima = Double.MAX_VALUE;
+
+        for (int i = 0; i < etiquetas.length; i++) {
+            double excentricidad = 0;
+            boolean esAlcanzable = true;
+
+            for (int j = 0; j < etiquetas.length; j++) {
+                if (i != j) {
+                    if (matrizFloyd[i][j] == Double.MAX_VALUE) {
+                        esAlcanzable = false;
+                        break;
+                    }
+                    excentricidad = Math.max(excentricidad, matrizFloyd[i][j]);
+                }
+            }
+
+            if (esAlcanzable && excentricidad < excentricidadMinima) {
+                excentricidadMinima = excentricidad;
+                centro = (Comparable) etiquetas[i];
+            }
+        }
+
+        return centro;
+    }
