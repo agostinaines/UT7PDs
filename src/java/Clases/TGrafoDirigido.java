@@ -1,16 +1,14 @@
 package Clases;
 
+import Interfaces.IAdyacencia;
 import Interfaces.IGrafoDirigido;
 import Interfaces.IVertice;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class TGrafoDirigido implements IGrafoDirigido {
 
-    private Map<Comparable, TVertice> vertices; // vertices del grafo.-
+    private Map<Comparable, TVertice> vertices;
 
     public TGrafoDirigido(Collection<TVertice> vertices, Collection<TArista> aristas) {
         this.vertices = new HashMap<>();
@@ -89,37 +87,23 @@ public class TGrafoDirigido implements IGrafoDirigido {
     }
 
     @Override
-    public Comparable centroDelGrafo() {
+    public Map<Comparable, Double> centroDelGrafo() {
         if (vertices.isEmpty()) {
             return null;
         }
 
-        Double[][] matrizFloyd = floyd();
-        Object[] etiquetas = getEtiquetasOrdenado();
-        Comparable centro = null;
-        double excentricidadMinima = Double.MAX_VALUE;
+        Comparable[] excentricidades = new Comparable[vertices.size()];
+        int i = 0;
 
-        for (int i = 0; i < etiquetas.length; i++) {
-            double excentricidad = 0;
-            boolean esAlcanzable = true;
-
-            for (int j = 0; j < etiquetas.length; j++) {
-                if (i != j) {
-                    if (matrizFloyd[i][j] == Double.MAX_VALUE) {
-                        esAlcanzable = false;
-                        break;
-                    }
-                    excentricidad = Math.max(excentricidad, matrizFloyd[i][j]);
-                }
-            }
-
-            if (esAlcanzable && excentricidad < excentricidadMinima) {
-                excentricidadMinima = excentricidad;
-                centro = (Comparable) etiquetas[i];
-            }
+        for (Comparable key : vertices.keySet()) {
+            excentricidades[i] = obtenerExcentricidad(key);
+            i++;
         }
 
-        return centro;
+        java.util.Arrays.sort(excentricidades);
+
+        Map<Comparable, Double> centroDelGrafo = new HashMap<>();
+        return centroDelGrafo;
     }
 
     @Override
@@ -144,26 +128,26 @@ public class TGrafoDirigido implements IGrafoDirigido {
     }
 
     @Override
-    public Comparable obtenerExcentricidad(Comparable etiquetaVertice) {
-        if (!existeVertice(etiquetaVertice)) {
-            return null;
-        }
-
+    public double obtenerExcentricidad(Comparable etiquetaVertice) {
         Double[][] matrizFloyd = floyd();
 
         int index = 0;
-        for (int i = 0; i < vertices.size(); i++) {
-            if (vertices.get(i) == vertices.get(etiquetaVertice)) {
+        int i = 0;
+
+        for (Comparable key : vertices.keySet()) {
+            if (key ==  etiquetaVertice) {
                 index = i;
                 break;
             }
+
+            i++;
         }
 
         double excentricidad = 0;
 
-        for (int i = 0; i < matrizFloyd.length; i++) {
-            double distancia = matrizFloyd[index][i];
-            if (distancia != Double.POSITIVE_INFINITY || distancia > excentricidad) {
+        for (int j = 0; j < matrizFloyd.length; j++) {
+            double distancia = matrizFloyd[index][j];
+            if (distancia > excentricidad && distancia != Double.MAX_VALUE) {
                 excentricidad = distancia;
             }
         }
@@ -206,6 +190,92 @@ public class TGrafoDirigido implements IGrafoDirigido {
         }
 
         return matrizWarshall;
+    }
+
+    // PD3 Ejercicio 2
+    public boolean existeConexion(Comparable etiquetaOrigen, Comparable etiquetaDestino) {
+        boolean[][] warshall = warshall();
+        int origen = 0;
+        int destino = 0;
+
+        int i = 0;
+
+        for (Comparable key : vertices.keySet()) {
+            if (key.equals(etiquetaOrigen)) {
+               origen = i;
+            }
+
+            if (key.equals(etiquetaDestino)) {
+                destino = i;
+            }
+
+            i++;
+        }
+
+        if (warshall[origen][destino]) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public Collection<TVertice> bpf() {
+        desvisitarVertices();
+        ArrayList<TVertice> resultado = new ArrayList<>();
+        for (TVertice vertice : getVertices().values()) {
+            if (vertice.getVisitado()) {
+                TVertice tVertice = (TVertice) vertice;
+                resultado.addAll(bpf(tVertice.getEtiqueta()));
+            }
+        }
+
+        return resultado;
+    }
+
+    @Override
+    public Collection<TVertice> bpf(Comparable etiquetaOrigen) {
+        IVertice vertice = buscarVertice(etiquetaOrigen);
+
+        TVertice tVertice = (TVertice) vertice;
+        desvisitarVertices();
+        return bpf(tVertice);
+    }
+
+    public Collection<TVertice> bpf(TVertice vertice) {
+
+        ArrayList<TVertice> resultado = new ArrayList<>();
+        if (vertice != null && !vertice.getVisitado()) {
+            vertice.setVisitado(true);
+            resultado.add((TVertice) vertice);
+            vertice.getAdyacentes().forEach((adyacente) -> {
+                IAdyacencia ady = (IAdyacencia) adyacente;
+                TVertice destino = ady.getDestino();
+                if (!destino.getVisitado()) {
+                    resultado.addAll(bpf((TVertice) destino));
+                }
+            });
+        }
+        return resultado;
+    }
+
+    @Override
+    public void desvisitarVertices() {
+        for (TVertice vertice : getVertices().values()) {
+            vertice.setVisitado(false);
+        }
+    }
+
+    @Override
+    public TCaminos todosLosCaminos(Comparable etiquetaOrigen, Comparable etiquetaDestino) {
+        desvisitarVertices();
+        IVertice verticeOrigen = buscarVertice(etiquetaOrigen);
+        if (verticeOrigen == null) {
+            return new TCaminos();
+        }
+        TCamino camino = new TCamino((TVertice) verticeOrigen);
+        TCaminos caminos = new TCaminos();
+        return verticeOrigen.todosLosCaminos(etiquetaDestino, camino, caminos);
     }
 
     @Override

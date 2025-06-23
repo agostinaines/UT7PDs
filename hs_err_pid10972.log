@@ -18,10 +18,10 @@
 
 ---------------  S U M M A R Y ------------
 
-Command Line: -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:56759,suspend=y,server=n -javaagent:C:\Users\ESTUDI~1\AppData\Local\Temp\captureAgent2jars\debugger-agent.jar=file:///C:/Users/ESTUDI~1/AppData/Local/Temp/capture9330858712950158030.props -agentpath:C:\Users\ESTUDI~1\AppData\Local\Temp\idea_libasyncProfiler_dll_temp_folder\libasyncProfiler.dll=version,jfr,event=wall,interval=10ms,cstack=no,file=C:\Users\Estudiante UCU\IdeaSnapshots\PruebaGrafo_2025_06_18_204520.jfr,dbghelppath=C:\Users\ESTUDI~1\AppData\Local\Temp\idea_dbghelp_dll_temp_folder\dbghelp.dll,log=C:\Users\ESTUDI~1\AppData\Local\Temp\PruebaGrafo_2025_06_18_204520.jfr.log.txt,logLevel=DEBUG -Dkotlinx.coroutines.debug.enable.creation.stack.trace=false -Ddebugger.agent.enable.coroutines=true -Dkotlinx.coroutines.debug.enable.flows.stack.trace=true -Dkotlinx.coroutines.debug.enable.mutable.state.flows.stack.trace=true -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 UT7PD2.PruebaGrafo
+Command Line: -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:56759,suspend=y,server=n -javaagent:C:\Users\ESTUDI~1\AppData\Local\Temp\captureAgent2jars\debugger-agent.jar=file:///C:/Users/ESTUDI~1/AppData/Local/Temp/capture9330858712950158030.props -agentpath:C:\Users\ESTUDI~1\AppData\Local\Temp\idea_libasyncProfiler_dll_temp_folder\libasyncProfiler.dll=version,jfr,event=wall,interval=10ms,cstack=no,file=C:\Users\Estudiante UCU\IdeaSnapshots\PruebaGrafo_2025_06_18_204520.jfr,dbghelppath=C:\Users\ESTUDI~1\AppData\Local\Temp\idea_dbghelp_dll_temp_folder\dbghelp.dll,log=C:\Users\ESTUDI~1\AppData\Local\Temp\PruebaGrafo_2025_06_18_204520.jfr.log.txt,logLevel=DEBUG -Dkotlinx.coroutines.debug.enable.creation.stack.trace=false -Ddebugger.agent.enable.coroutines=true -Dkotlinx.coroutines.debug.enable.flows.stack.trace=true -Dkotlinx.coroutines.debug.enable.mutable.state.flows.stack.trace=true -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 UT7PD2.PD2
 
 Host: 12th Gen Intel(R) Core(TM) i5-12450H, 12 cores, 19G,  Windows 11 , 64 bit Build 26100 (10.0.26100.3912)
-Time: Wed Jun 18 20:46:54 2025 Hora estándar de Montevideo elapsed time: 93.932311 seconds (0d 0h 1m 33s)
+Time: Wed Jun 18 20:46:54 2025 Hora estï¿½ndar de Montevideo elapsed time: 93.932311 seconds (0d 0h 1m 33s)
 
 ---------------  T H R E A D  ---------------
 
@@ -618,7 +618,7 @@ symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Us
 
 VM Arguments:
 jvm_args: -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:56759,suspend=y,server=n -javaagent:C:\Users\ESTUDI~1\AppData\Local\Temp\captureAgent2jars\debugger-agent.jar=file:///C:/Users/ESTUDI~1/AppData/Local/Temp/capture9330858712950158030.props -agentpath:C:\Users\ESTUDI~1\AppData\Local\Temp\idea_libasyncProfiler_dll_temp_folder\libasyncProfiler.dll=version,jfr,event=wall,interval=10ms,cstack=no,file=C:\Users\Estudiante UCU\IdeaSnapshots\PruebaGrafo_2025_06_18_204520.jfr,dbghelppath=C:\Users\ESTUDI~1\AppData\Local\Temp\idea_dbghelp_dll_temp_folder\dbghelp.dll,log=C:\Users\ESTUDI~1\AppData\Local\Temp\PruebaGrafo_2025_06_18_204520.jfr.log.txt,logLevel=DEBUG -Dkotlinx.coroutines.debug.enable.creation.stack.trace=false -Ddebugger.agent.enable.coroutines=true -Dkotlinx.coroutines.debug.enable.flows.stack.trace=true -Dkotlinx.coroutines.debug.enable.mutable.state.flows.stack.trace=true -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 
-java_command: UT7PD2.PruebaGrafo
+java_command: UT7PD2.PD2
 java_class_path (initial): C:\Users\Estudiante UCU\Documents\ALGORITMOS Y ESTRUCTURAS DE DATOS\UT7\UT7PDs\${project.build.directory}\classes;C:\Program Files\JetBrains\IntelliJ IDEA 2024.3.5\lib\idea_rt.jar
 Launcher Type: SUN_STANDARD
 

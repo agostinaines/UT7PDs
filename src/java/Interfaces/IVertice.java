@@ -1,6 +1,8 @@
 package Interfaces;
 
 import Clases.TAdyacencia;
+import Clases.TCamino;
+import Clases.TCaminos;
 import Clases.TVertice;
 
 import java.util.LinkedList;
@@ -24,4 +26,6 @@ public interface IVertice {
     TVertice siguienteAdyacente(TVertice w);
 
     Comparable getEtiqueta();
+
+    TCaminos todosLosCaminos(Comparable etVertDest, TCamino caminoPrevio, TCaminos todosLosCaminos);
 }

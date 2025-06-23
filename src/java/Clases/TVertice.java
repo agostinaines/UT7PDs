@@ -1,5 +1,6 @@
 package Clases;
 
+import Interfaces.IAdyacencia;
 import Interfaces.IVertice;
 
 import java.util.LinkedList;
@@ -100,5 +101,26 @@ public class TVertice<T> implements IVertice {
 
     public T getDatos() {
         return datos;
+    }
+
+    @Override
+    public TCaminos todosLosCaminos(Comparable etVertDest, TCamino caminoPrevio, TCaminos todosLosCaminos) {
+        this.setVisitado(true);
+        for (IAdyacencia adyacencia : this.getAdyacentes()) {
+            TVertice destino = (TVertice) adyacencia.getDestino();
+            if (!destino.getVisitado()) {
+                if (destino.getEtiqueta().compareTo(etVertDest) == 0) {
+                    TCamino copia = caminoPrevio.copiar();
+                    copia.agregarAdyacencia((TAdyacencia) adyacencia);
+                    todosLosCaminos.getCaminos().add(copia);
+                } else {
+                    TCamino copia = caminoPrevio.copiar();
+                    copia.agregarAdyacencia((TAdyacencia) adyacencia);
+                    destino.todosLosCaminos(etVertDest, copia, todosLosCaminos);
+                }
+            }
+        }
+        this.setVisitado(false);
+        return todosLosCaminos;
     }
 }

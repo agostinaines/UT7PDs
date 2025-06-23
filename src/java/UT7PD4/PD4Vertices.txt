@@ -1,0 +1,9 @@
+﻿Asuncion
+BuenosAires
+Curitiba
+Florianopolis
+Montevideo
+PortoAlegre
+RioDeJaneiro
+SanPablo
+Santos

@@ -1,0 +1,15 @@
+﻿Asuncion,BuenosAires,1600
+Asuncion,Curitiba,800
+Asuncion,PortoAlegre,700
+BuenosAires,Montevideo,200
+BuenosAires,PortoAlegre,1250
+Curitiba,Montevideo,1400
+Florianopolis,RioDeJaneiro,700
+Florianopolis,SanPablo,650
+PortoAlegre,Montevideo,1000
+RioDeJaneiro,SanPablo,1800
+RioDeJaneiro,Santos,1900
+SanPablo,Florianopolis,650
+SanPablo,RioDeJaneiro,1800
+SanPablo,Santos,220
+Santos,SanPablo,220

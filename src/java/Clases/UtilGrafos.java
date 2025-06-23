@@ -164,6 +164,53 @@ public class UtilGrafos {
         System.out.println();
     }
 
+    public static void imprimirMatrizWarshall(boolean[][] matrizAux, Map<Comparable, TVertice> vertices,
+                                              String titulo) {
+        int n = matrizAux.length;
+        Comparable[][] matriz = new Comparable[n][n];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matriz[i][j] = matrizAux[i][j] ? 1 : 0;
+            }
+        }
+
+        Comparable[] etiquetas = vertices.keySet().toArray(new Comparable[0]);
+        int etiquetaMasLarga = stringMasLargo(etiquetas);
+        int largo = etiquetaMasLarga + 4;
+
+        for (int i = 0; i < etiquetas.length; i++) {
+            etiquetas[i] = rellenar(etiquetas[i].toString(), largo, ' ');
+        }
+
+        int tope = (largo) * (etiquetas.length + 1);
+
+        String linea = rellenar("", tope, '-');
+        String separador = rellenar("", largo, ' ');
+        String sepTitulo = rellenar("", tope, '*');
+
+        System.out.println(sepTitulo);
+        System.out.println(devolverCentrado(titulo, tope));
+        System.out.println(sepTitulo);
+        System.out.println(linea);
+
+        System.out.print(separador);
+        for (Comparable etiqueta : etiquetas) {
+            System.out.print(etiqueta);
+        }
+        System.out.println();
+        System.out.println(linea);
+
+        for (int i = 0; i < n; i++) {
+            System.out.print(etiquetas[i]);
+            for (int j = 0; j < n; j++) {
+                System.out.print(rellenar(matriz[i][j].toString(), largo, ' '));
+            }
+            System.out.println();
+            System.out.println(linea);
+        }
+    }
+
     public static String rellenar(String textoARellenar, int largoTotal, char relleno) {
         while (textoARellenar.length() < largoTotal) {
             textoARellenar += relleno;
