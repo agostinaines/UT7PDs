@@ -194,7 +194,10 @@ public class TGrafoDirigido implements IGrafoDirigido {
 
     // PD3 Ejercicio 2
     public boolean existeConexion(Comparable etiquetaOrigen, Comparable etiquetaDestino) {
-        boolean[][] warshall = warshall();
+        if (!vertices.containsKey(etiquetaOrigen) ||  !vertices.containsKey(etiquetaDestino)) {
+            return false;
+        }
+        boolean[][] matrizWarshall = warshall();
         int origen = 0;
         int destino = 0;
 
@@ -212,11 +215,7 @@ public class TGrafoDirigido implements IGrafoDirigido {
             i++;
         }
 
-        if (warshall[origen][destino]) {
-            return true;
-        }
-
-        return false;
+        return matrizWarshall[origen][destino];
     }
 
     @Override
@@ -282,5 +281,4 @@ public class TGrafoDirigido implements IGrafoDirigido {
     public boolean eliminarVertice(Comparable nombreVertice) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }

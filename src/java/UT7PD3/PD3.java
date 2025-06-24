@@ -1,17 +1,14 @@
 package UT7PD3;
 
 import Clases.TGrafoDirigido;
+import Clases.TVertice;
 import Clases.UtilGrafos;
-
-import java.io.Console;
-import java.sql.SQLOutput;
+import java.util.Collection;
 
 public class PD3 {
     public static void main(String[] args) {
         TGrafoDirigido gd = (TGrafoDirigido) UtilGrafos.cargarGrafo("./src/java/UT7PD3/PD3Vertices.txt","./src/java/UT7PD3/PD3Aristas.txt",
                 false, TGrafoDirigido.class);
-
-        Object[] etiquetasarray = gd.getEtiquetasOrdenado();
 
         Double[][] matriz = UtilGrafos.obtenerMatrizCostos(gd.getVertices());
         UtilGrafos.imprimirMatrizMejorado(matriz, gd.getVertices(), "Matriz");
@@ -29,5 +26,12 @@ public class PD3 {
 
         boolean conexionEs = gd.existeConexion(origen, destino);
         System.out.println(conexionEs);
+        System.out.println();
+
+        Collection<TVertice> bpfMontevideo = gd.bpf("Montevideo");
+        System.out.println("La búsqueda en profundidad desde Montevideo es: ");
+        for (TVertice vertice : bpfMontevideo) {
+            System.out.print(vertice.getEtiqueta() + " ");
+        }
     }
 }

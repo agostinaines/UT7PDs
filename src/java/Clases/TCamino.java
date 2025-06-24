@@ -1,19 +1,14 @@
 package Clases;
 
+import Interfaces.ICamino;
+
 import java.util.Collection;
 import java.util.LinkedList;
 
-/**
- *
- * @author diego
- */
 public class TCamino implements ICamino {
 
     private final TVertice origen;
     private Collection<Comparable> otrosVertices;
-// es una lista de etiquetas de los vertices
-// ATENCIÓN: PONER LA CLASE CONCRETA QUE									     	     
-// SEA MÁS APROPIADA
     private Double costoTotal = 0.0d;
 
     public void imprimirEtiquetasConsola() {
@@ -84,5 +79,4 @@ public class TCamino implements ICamino {
         sb.append(" (Costo total: ").append(costoTotal).append(")");
         return sb.toString();
     }
-
 }

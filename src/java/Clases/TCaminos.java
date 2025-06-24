@@ -3,10 +3,6 @@ package Clases;
 import java.util.Collection;
 import java.util.LinkedList;
 
-/**
- *
- * @author diego
- */
 public class TCaminos {
     
     private Collection<TCamino> caminos;

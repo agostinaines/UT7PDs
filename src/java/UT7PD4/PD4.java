@@ -1,7 +1,8 @@
 package UT7PD4;
 
-import Clases.TGrafoDirigido;
-import Clases.UtilGrafos;
+import Clases.*;
+
+import java.util.Collection;
 
 public class PD4 {
     public static void main(String[] args) {
@@ -13,6 +14,12 @@ public class PD4 {
         Double[][] matriz = UtilGrafos.obtenerMatrizCostos(gd.getVertices());
         UtilGrafos.imprimirMatrizMejorado(matriz, gd.getVertices(), "Matriz");
 
-        gd.bpf();
+        TCaminos caminos = gd.todosLosCaminos("Santos", "Curitiba");
+        Collection<TCamino> prueba = caminos.getCaminos();
+        for (TCamino camino : prueba) {
+            System.out.println(camino);
+        }
+
+        caminos.imprimirCaminosConsola();
     }
 }

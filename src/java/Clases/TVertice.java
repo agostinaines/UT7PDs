@@ -120,6 +120,7 @@ public class TVertice<T> implements IVertice {
                 }
             }
         }
+
         this.setVisitado(false);
         return todosLosCaminos;
     }
