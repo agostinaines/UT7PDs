@@ -20,6 +20,9 @@ public class PD4 {
             System.out.println(camino);
         }
 
+        TCaminos caminos2 = gd.todosLosCaminos("Santos", "Santos");
+        System.out.println(caminos2.imprimirCaminos());
+
         caminos.imprimirCaminosConsola();
     }
 }

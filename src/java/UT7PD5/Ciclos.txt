@@ -1,0 +1,24 @@
+﻿@Override
+    public boolean tieneCiclo() {
+        desvisitarVertices();
+        int i = 0;
+        boolean resultado = false;
+        for (IVertice vertice : getVertices().values()) {
+            TCamino camino = new TCamino((TVertice) vertice);
+            Object[] etiquetas = getEtiquetasOrdenado();
+            TCaminos caminos = new TCaminos();
+            TCaminos todosLosCaminos = vertice.todosLosCaminosConCiclo((Comparable) etiquetas[i], camino, caminos);
+            Object[] caminosExtra = todosLosCaminos.getCaminos().toArray();
+            for (int j = 0; j < caminosExtra.length; j++) {
+                resultado = vertice.tieneCiclo((TCamino) caminosExtra[j]);
+                if (resultado) {
+                    System.out.println(((TCamino) caminosExtra[j]).imprimirEtiquetas());
+                }
+            }
+            i++;
+        }
+        return resultado;
+    }
+
+
+tieneCiclo()

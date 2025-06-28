@@ -87,23 +87,29 @@ public class TGrafoDirigido implements IGrafoDirigido {
     }
 
     @Override
-    public Map<Comparable, Double> centroDelGrafo() {
+    public TVertice centroDelGrafo() {
         if (vertices.isEmpty()) {
             return null;
         }
 
-        Comparable[] excentricidades = new Comparable[vertices.size()];
+        double[] excentricidades = new double[vertices.size()];
         int i = 0;
+
+        double max = 0;
+        Comparable etiqueta = "";
 
         for (Comparable key : vertices.keySet()) {
             excentricidades[i] = obtenerExcentricidad(key);
+
+            if  (excentricidades[i] > max) {
+                max = excentricidades[i];
+                etiqueta = key;
+            }
+
             i++;
         }
 
-        java.util.Arrays.sort(excentricidades);
-
-        Map<Comparable, Double> centroDelGrafo = new HashMap<>();
-        return centroDelGrafo;
+        return vertices.get(etiqueta);
     }
 
     @Override
@@ -241,6 +247,7 @@ public class TGrafoDirigido implements IGrafoDirigido {
         return bpf(tVertice);
     }
 
+    @Override
     public Collection<TVertice> bpf(TVertice vertice) {
 
         ArrayList<TVertice> resultado = new ArrayList<>();
@@ -275,6 +282,50 @@ public class TGrafoDirigido implements IGrafoDirigido {
         TCamino camino = new TCamino((TVertice) verticeOrigen);
         TCaminos caminos = new TCaminos();
         return verticeOrigen.todosLosCaminos(etiquetaDestino, camino, caminos);
+    }
+
+    @Override
+    public boolean tieneCiclo() {
+        desvisitarVertices();
+        int i = 0;
+        boolean resultado = false;
+        for (IVertice vertice : getVertices().values()) {
+            TCamino camino = new TCamino((TVertice) vertice);
+            Object[] etiquetas = getEtiquetasOrdenado();
+            TCaminos caminos = new TCaminos();
+            TCaminos todosLosCaminos = vertice.todosLosCaminosConCiclo((Comparable) etiquetas[i], camino, caminos);
+            Object[] caminosExtra = todosLosCaminos.getCaminos().toArray();
+            for (int j = 0; j < caminosExtra.length; j++) {
+                resultado = vertice.tieneCiclo((TCamino) caminosExtra[j]);
+                if (resultado) {
+                    System.out.println(((TCamino) caminosExtra[j]).imprimirEtiquetas());
+                }
+            }
+            i++;
+        }
+        return resultado;
+    }
+
+    @Override
+    public ArrayList<IVertice> ordenParcial() {
+        if (tieneCiclo() || getVertices().isEmpty()) {
+            return null;
+        }
+
+        IVertice fin = buscarVertice("Fin");
+
+        ArrayList<IVertice> resultado = new ArrayList<>();
+
+        LinkedList<IVertice> ordenados = new LinkedList<>();
+        for (IVertice vertice : getVertices().values()) {
+            if (!vertice.getVisitado()) {
+                ordenados = vertice.ordenParcial(ordenados);
+            }
+        }
+
+        desvisitarVertices();
+
+        return resultado;
     }
 
     @Override

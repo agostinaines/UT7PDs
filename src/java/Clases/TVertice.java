@@ -3,7 +3,10 @@ package Clases;
 import Interfaces.IAdyacencia;
 import Interfaces.IVertice;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 public class TVertice<T> implements IVertice {
 
@@ -27,10 +30,12 @@ public class TVertice<T> implements IVertice {
         visitado = false;
     }
 
+    @Override
     public void setVisitado(boolean valor) {
         this.visitado = valor;
     }
 
+    @Override
     public boolean getVisitado() {
         return this.visitado;
     }
@@ -120,8 +125,77 @@ public class TVertice<T> implements IVertice {
                 }
             }
         }
-
         this.setVisitado(false);
         return todosLosCaminos;
+    }
+
+    @Override
+    public boolean tieneCiclo(TCamino unCamino) {
+        boolean resultado = false;
+        Collection<Comparable> otrosVertices = unCamino.getOtrosVertices();
+        TVertice origen = unCamino.getOrigen();
+        ArrayList<Comparable> aux = new ArrayList<>();
+        aux.add(origen.getEtiqueta());
+        for (Comparable vertices : otrosVertices) {
+            if (aux.contains(vertices)) {
+                resultado = true;
+            }
+            aux.add(vertices);
+        }
+        return resultado;
+    }
+
+    @Override
+    public TCaminos todosLosCaminosConCiclo(Comparable etVertDest, TCamino caminoPrevio, TCaminos todosLosCaminos) {
+        this.setVisitado(true);
+        for (IAdyacencia adyacencia : this.getAdyacentes()) {
+            TVertice destino = (TVertice) adyacencia.getDestino();
+            TCamino copia = caminoPrevio.copiar();
+            copia.agregarAdyacencia((TAdyacencia) adyacencia);
+            if (destino.getEtiqueta().compareTo(etVertDest) == 0) {
+                if (copia.getOtrosVertices().size() > 0) {
+                    todosLosCaminos.getCaminos().add(copia);
+                }
+            } else {
+                if (!caminoPrevio.getOtrosVertices().contains(destino.getEtiqueta())) {
+                    destino.todosLosCaminosConCiclo(etVertDest, copia, todosLosCaminos);
+                } else
+                    todosLosCaminos.getCaminos().add(copia);
+            }
+
+        }
+        this.setVisitado(false);
+        return todosLosCaminos;
+    }
+
+    @Override
+    public LinkedList<IVertice> ordenParcial(List<IVertice> vertices) {
+        LinkedList<IVertice> resultado = new LinkedList<>();
+        for (IVertice vertice : vertices) {
+            if (vertice.getVisitado()) {
+                continue;
+            }
+            resultado.add(vertice);
+            vertice.setVisitado(true);
+            LinkedList<IVertice> adyacentes = new LinkedList<>();
+            for (IAdyacencia adyacencia : vertice.getAdyacentes()) {
+                IVertice destino = adyacencia.getDestino();
+                if (!destino.getVisitado()) {
+                    adyacentes.add(destino);
+                }
+            }
+            while (!adyacentes.isEmpty()) {
+                IVertice adyacente = adyacentes.removeFirst();
+                resultado.add(adyacente);
+                adyacente.setVisitado(true);
+                for (IAdyacencia ady : adyacente.getAdyacentes()) {
+                    IVertice destino = ady.getDestino();
+                    if (!destino.getVisitado() && !adyacentes.contains(destino)) {
+                        adyacentes.add(destino);
+                    }
+                }
+            }
+        }
+        return resultado;
     }
 }

@@ -19,6 +19,6 @@ public class PD2 {
         }
 
         System.out.println();
-        System.out.println("Centro del grafo: " + gd.centroDelGrafo());
+        System.out.println("Centro del grafo: " + gd.centroDelGrafo().getEtiqueta());
     }
 }
