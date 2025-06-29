@@ -3,10 +3,7 @@ package Clases;
 import Interfaces.IAdyacencia;
 import Interfaces.IVertice;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class TVertice<T> implements IVertice {
 
@@ -168,34 +165,24 @@ public class TVertice<T> implements IVertice {
         return todosLosCaminos;
     }
 
-    @Override
-    public LinkedList<IVertice> ordenParcial(List<IVertice> vertices) {
-        LinkedList<IVertice> resultado = new LinkedList<>();
-        for (IVertice vertice : vertices) {
-            if (vertice.getVisitado()) {
-                continue;
-            }
-            resultado.add(vertice);
-            vertice.setVisitado(true);
-            LinkedList<IVertice> adyacentes = new LinkedList<>();
-            for (IAdyacencia adyacencia : vertice.getAdyacentes()) {
-                IVertice destino = adyacencia.getDestino();
-                if (!destino.getVisitado()) {
-                    adyacentes.add(destino);
-                }
-            }
-            while (!adyacentes.isEmpty()) {
-                IVertice adyacente = adyacentes.removeFirst();
-                resultado.add(adyacente);
-                adyacente.setVisitado(true);
-                for (IAdyacencia ady : adyacente.getAdyacentes()) {
-                    IVertice destino = ady.getDestino();
-                    if (!destino.getVisitado() && !adyacentes.contains(destino)) {
-                        adyacentes.add(destino);
-                    }
-                }
+    public void indegree(Map<Comparable, Integer> indegree) {
+        for (IAdyacencia adyacencia : this.getAdyacentes()) {
+            Integer auxIndegree =  indegree.get(adyacencia.getEtiqueta());
+            indegree.replace(adyacencia.getDestino().getEtiqueta(), auxIndegree + 1);
+        }
+    }
+
+    public void sortTopologico(Queue<IVertice> sort, Map<Comparable, Integer> indegree, Queue<IVertice> indegreeZero) {
+        setVisitado(true);
+
+        for (IAdyacencia adyacencia : this.getAdyacentes()) {
+            Integer indegreeAux = indegree.get(adyacencia.getDestino().getEtiqueta());
+            indegree.replace(adyacencia.getDestino().getEtiqueta(), indegreeAux - 1);
+
+            if (indegree.get(adyacencia.getDestino().getEtiqueta()) == 0 && !adyacencia.getDestino().getVisitado()) {
+                sort.add(adyacencia.getDestino());
+                adyacencia.getDestino().sortTopologico(sort, indegree, indegreeZero);
             }
         }
-        return resultado;
     }
 }

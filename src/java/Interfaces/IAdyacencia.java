@@ -9,4 +9,8 @@ public interface IAdyacencia {
     TVertice getDestino();
 
     Comparable getEtiqueta();
+
+    Comparable getArco();
+
+    void setArco(Comparable arco);
 }

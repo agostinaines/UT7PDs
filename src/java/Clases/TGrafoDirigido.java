@@ -3,7 +3,6 @@ package Clases;
 import Interfaces.IAdyacencia;
 import Interfaces.IGrafoDirigido;
 import Interfaces.IVertice;
-
 import java.util.*;
 
 public class TGrafoDirigido implements IGrafoDirigido {
@@ -124,7 +123,7 @@ public class TGrafoDirigido implements IGrafoDirigido {
         for (int k = 0; k < matrizFloyd.length; k++) {
             for (int i = 0; i < matrizFloyd[0].length; i++) {
                 for (int j = 0; j < matrizFloyd[0].length; j++) {
-                    if (matrizFloyd[i][k] + matrizFloyd[k][j] < matrizCostos[i][j]) {
+                    if (matrizFloyd[i][k] + matrizFloyd[k][j] < matrizFloyd[i][j]) {
                         matrizFloyd[i][j] = matrizFloyd[i][k] + matrizFloyd[k][j];
                     }
                 }
@@ -225,11 +224,13 @@ public class TGrafoDirigido implements IGrafoDirigido {
     }
 
     @Override
-    public Collection<TVertice> bpf() {
+    public ArrayList<TVertice> bpf() {
         desvisitarVertices();
+
         ArrayList<TVertice> resultado = new ArrayList<>();
+
         for (TVertice vertice : getVertices().values()) {
-            if (vertice.getVisitado()) {
+            if (!vertice.getVisitado()) {
                 TVertice tVertice = (TVertice) vertice;
                 resultado.addAll(bpf(tVertice.getEtiqueta()));
             }
@@ -239,7 +240,7 @@ public class TGrafoDirigido implements IGrafoDirigido {
     }
 
     @Override
-    public Collection<TVertice> bpf(Comparable etiquetaOrigen) {
+    public ArrayList<TVertice> bpf(Comparable etiquetaOrigen) {
         IVertice vertice = buscarVertice(etiquetaOrigen);
 
         TVertice tVertice = (TVertice) vertice;
@@ -248,11 +249,12 @@ public class TGrafoDirigido implements IGrafoDirigido {
     }
 
     @Override
-    public Collection<TVertice> bpf(TVertice vertice) {
+    public ArrayList<TVertice> bpf(TVertice vertice) {
 
         ArrayList<TVertice> resultado = new ArrayList<>();
         if (vertice != null && !vertice.getVisitado()) {
             vertice.setVisitado(true);
+
             resultado.add((TVertice) vertice);
             vertice.getAdyacentes().forEach((adyacente) -> {
                 IAdyacencia ady = (IAdyacencia) adyacente;
@@ -262,6 +264,20 @@ public class TGrafoDirigido implements IGrafoDirigido {
                 }
             });
         }
+        return resultado;
+    }
+
+    public HashMap<Comparable, Integer> bpfNumSet() {
+        HashMap<Comparable, Integer> resultado = new HashMap<>();
+        int bpfNum = 0;
+        Collection<TVertice> bpfRecorrido = bpf();
+        for (TVertice vertice : bpfRecorrido) {
+            if (!resultado.containsKey(vertice.getEtiqueta())) {
+                resultado.put(vertice.getEtiqueta(), bpfNum);
+                bpfNum++;
+            }
+        }
+
         return resultado;
     }
 
@@ -306,26 +322,96 @@ public class TGrafoDirigido implements IGrafoDirigido {
         return resultado;
     }
 
-    @Override
-    public ArrayList<IVertice> ordenParcial() {
+    public Map<Comparable, Integer> indegree() {
+        Map<Comparable, Integer> indegrees = new HashMap<>();
+
+        for (TVertice vertice : getVertices().values()) {
+            indegrees.put(vertice.getEtiqueta(), 0);
+        }
+
+        for (TVertice vertice : getVertices().values()) {
+            vertice.indegree(indegrees);
+        }
+
+        return indegrees;
+    }
+
+    public Queue<IVertice> sortTopologico() {
         if (tieneCiclo() || getVertices().isEmpty()) {
             return null;
         }
 
-        IVertice fin = buscarVertice("Fin");
+        Map<Comparable, Integer> indegrees = indegree();
+        Queue<IVertice> sort = new LinkedList<>();
+        Queue<IVertice> indegreeZero = new LinkedList<>();
 
-        ArrayList<IVertice> resultado = new ArrayList<>();
-
-        LinkedList<IVertice> ordenados = new LinkedList<>();
-        for (IVertice vertice : getVertices().values()) {
-            if (!vertice.getVisitado()) {
-                ordenados = vertice.ordenParcial(ordenados);
+        for (TVertice vertice : getVertices().values()) {
+            if (indegrees.get(vertice.getEtiqueta()) == 0) {
+                indegreeZero.add(vertice);
             }
         }
 
-        desvisitarVertices();
+        for (IVertice vertice : indegreeZero) {
+            sort.add(vertice);
+            vertice.sortTopologico(sort, indegrees, indegreeZero);
+        }
 
-        return resultado;
+        return sort;
+    }
+
+    public void identificarArcos() {
+        ArrayList<TVertice> bpfRecorrido = bpf();
+
+        Map<Comparable, Integer> bpfNums = bpfNumSet();
+        boolean esDescendiente = false;
+
+        for (int j = 0; j < bpfRecorrido.size() - 1; j++) {
+            bpfRecorrido.get(j).setVisitado(true);
+
+            if (bpfRecorrido.get(j+1) != null) {
+                TVertice origen = buscarVertice(bpfRecorrido.get(j).getEtiqueta());
+                TVertice destino = buscarVertice(bpfRecorrido.get(j+1).getEtiqueta());
+
+                TAdyacencia adyacencia = origen.buscarAdyacencia(destino);
+
+                if (adyacencia == null) {
+                    continue;
+                }
+
+                if (bpfNums.get(origen.getEtiqueta()) <= bpfNums.get(destino.getEtiqueta())) {
+                    if (bpfNums.get(destino.getEtiqueta()) <= (bpfNums.get(origen.getEtiqueta()) + origen.getAdyacentes().size())) {
+                        esDescendiente = true;
+                    }
+                }
+
+                if (destino.getVisitado()) {
+                    adyacencia.setArco("Árbol");
+                }
+
+                if (bpfNums.get(origen.getEtiqueta()) < bpfNums.get(destino.getEtiqueta()) && !destino.getVisitado()) {
+                    adyacencia.setArco("Avance");
+                }
+
+                if (bpfNums.get(origen.getEtiqueta()) < bpfNums.get(destino.getEtiqueta()) && !esDescendiente ) {
+                    adyacencia.setArco("Cruzado");
+                }
+
+                if (bpfNums.get(origen.getEtiqueta()) > bpfNums.get(destino.getEtiqueta())) {
+                    adyacencia.setArco("Retroceso");
+                }
+            }
+        }
+    }
+
+    public void imprimirArcos() {
+        identificarArcos();
+
+        for (TVertice vertice : getVertices().values()) {
+            vertice.getAdyacentes().forEach(adyacente -> {
+                TAdyacencia ady = (TAdyacencia) adyacente;
+                System.out.println(vertice.getEtiqueta() + "-" + ady.getDestino().getEtiqueta() + "-" + ady.getArco());
+            });
+        }
     }
 
     @Override

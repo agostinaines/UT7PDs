@@ -42,6 +42,4 @@ public interface IGrafoDirigido {
     TCaminos todosLosCaminos(Comparable etiquetaOrigen, Comparable etiquetaDestino);
 
     boolean tieneCiclo();
-
-    ArrayList<IVertice> ordenParcial();
 }

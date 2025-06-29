@@ -7,6 +7,7 @@ public class TAdyacencia implements IAdyacencia {
     private Comparable etiqueta;
     private double costo;
     private TVertice destino;
+    public Comparable arco;
     
     @Override
     public Comparable getEtiqueta() {
@@ -27,5 +28,14 @@ public class TAdyacencia implements IAdyacencia {
         this.etiqueta = destino.getEtiqueta();
         this.costo = costo;
         this.destino = destino;
+        this.arco = null;
     }
+
+    @Override
+    public Comparable getArco() {
+        return arco;
+    }
+
+    @Override
+    public void setArco(Comparable arco) { this.arco = arco; }
 }

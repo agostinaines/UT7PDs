@@ -5,8 +5,7 @@ import Clases.TCamino;
 import Clases.TCaminos;
 import Clases.TVertice;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public interface IVertice {
 
@@ -38,5 +37,5 @@ public interface IVertice {
 
     TCaminos todosLosCaminosConCiclo(Comparable etVertDest, TCamino caminoPrevio, TCaminos todosLosCaminos);
 
-    LinkedList<IVertice> ordenParcial(List<IVertice> vertices);
+    void sortTopologico(Queue<IVertice> sort, Map<Comparable, Integer> indegree, Queue<IVertice> indegreeZero);
 }

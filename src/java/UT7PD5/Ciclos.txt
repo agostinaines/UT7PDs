@@ -3,12 +3,17 @@
         desvisitarVertices();
         int i = 0;
         boolean resultado = false;
+
         for (IVertice vertice : getVertices().values()) {
+
             TCamino camino = new TCamino((TVertice) vertice);
-            Object[] etiquetas = getEtiquetasOrdenado();
             TCaminos caminos = new TCaminos();
+
+            Object[] etiquetas = getEtiquetasOrdenado();
+
             TCaminos todosLosCaminos = vertice.todosLosCaminosConCiclo((Comparable) etiquetas[i], camino, caminos);
             Object[] caminosExtra = todosLosCaminos.getCaminos().toArray();
+
             for (int j = 0; j < caminosExtra.length; j++) {
                 resultado = vertice.tieneCiclo((TCamino) caminosExtra[j]);
                 if (resultado) {
@@ -20,5 +25,47 @@
         return resultado;
     }
 
+    @Override
+        public TCaminos todosLosCaminosConCiclo(Comparable etVertDest, TCamino caminoPrevio, TCaminos todosLosCaminos) {
+            this.setVisitado(true);
+
+            for (IAdyacencia adyacencia : this.getAdyacentes()) {
+                TVertice destino = (TVertice) adyacencia.getDestino();
+                TCamino copia = caminoPrevio.copiar();
+                copia.agregarAdyacencia((TAdyacencia) adyacencia);
+
+                if (destino.getEtiqueta().compareTo(etVertDest) == 0) {
+                    if (copia.getOtrosVertices().size() > 0) {
+                        todosLosCaminos.getCaminos().add(copia);
+                    }
+                } else {
+                    if (!caminoPrevio.getOtrosVertices().contains(destino.getEtiqueta())) {
+                        destino.todosLosCaminosConCiclo(etVertDest, copia, todosLosCaminos);
+                    } else
+                        todosLosCaminos.getCaminos().add(copia);
+                }
+
+            }
+            this.setVisitado(false);
+            return todosLosCaminos;
+        }
+
+     public boolean tieneCiclo(TCamino unCamino) {
+            boolean resultado = false;
+            Collection<Comparable> otrosVertices = unCamino.getOtrosVertices();
+            TVertice origen = unCamino.getOrigen();
+            ArrayList<Comparable> aux = new ArrayList<>();
+            aux.add(origen.getEtiqueta());
+            for (Comparable vertices : otrosVertices) {
+                if (aux.contains(vertices)) {
+                    resultado = true;
+                }
+                aux.add(vertices);
+            }
+            return resultado;
+        }
+
+
 
 tieneCiclo()
+

@@ -9,20 +9,9 @@ public class PD4 {
         TGrafoDirigido gd = (TGrafoDirigido) UtilGrafos.cargarGrafo("./src/java/UT7PD4/PD4Vertices.txt","./src/java/UT7PD4/PD4Aristas.txt",
                 false, TGrafoDirigido.class);
 
-        Object[] etiquetasarray = gd.getEtiquetasOrdenado();
-
         Double[][] matriz = UtilGrafos.obtenerMatrizCostos(gd.getVertices());
         UtilGrafos.imprimirMatrizMejorado(matriz, gd.getVertices(), "Matriz");
 
-        TCaminos caminos = gd.todosLosCaminos("Santos", "Curitiba");
-        Collection<TCamino> prueba = caminos.getCaminos();
-        for (TCamino camino : prueba) {
-            System.out.println(camino);
-        }
-
-        TCaminos caminos2 = gd.todosLosCaminos("Santos", "Santos");
-        System.out.println(caminos2.imprimirCaminos());
-
-        caminos.imprimirCaminosConsola();
+        gd.todosLosCaminos("Florianopolis", "SanPablo").imprimirCaminosConsola();
     }
 }

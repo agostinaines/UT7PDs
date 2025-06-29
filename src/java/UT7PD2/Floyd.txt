@@ -11,7 +11,7 @@ Double[][] matrizCostos = UtilGrafos.obtenerMatrizCostos(vertices);
         for (int k = 0; k < matrizFloyd.length; k++) {
             for (int i = 0; i < matrizFloyd[0].length; i++) {
                 for (int j = 0; j < matrizFloyd[0].length; j++) {
-                    if (matrizFloyd[i][k] + matrizFloyd[k][j] < matrizCostos[i][j]) {
+                    if (matrizFloyd[i][k] + matrizFloyd[k][j] < matrizFloyd[i][j]) {
                         matrizFloyd[i][j] = matrizFloyd[i][k] + matrizFloyd[k][j];
                     }
                 }

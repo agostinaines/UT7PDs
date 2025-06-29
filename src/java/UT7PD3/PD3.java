@@ -16,8 +16,19 @@ public class PD3 {
         Double[][] mfloyd = gd.floyd();
         UtilGrafos.imprimirMatrizMejorado(mfloyd, gd.getVertices(), "Floyd");
 
+        /*
+            El costo de volar de Montevideo a Río de Janeiro es 3780.
+            El costo de volar de Montevideo a Curitiba es 2580.
+            El centro de mantenimiento debe ubicarse en Curitiba.
+         */
+
         boolean[][] mwarshall = gd.warshall();
         UtilGrafos.imprimirMatrizWarshall(mwarshall, gd.getVertices(), "Warshall");
+
+        /*
+            ¿Existen conexiones entre Montevideo y Curitiba? Sí.
+            ¿Existen conexiones entre Porto Alegre y Santos? Sí.
+         */
 
         System.out.println("Origen: ");
         Comparable origen = System.console().readLine();
@@ -33,5 +44,8 @@ public class PD3 {
         for (TVertice vertice : bpfMontevideo) {
             System.out.print(vertice.getEtiqueta() + " ");
         }
+
+        System.out.println();
+        System.out.println("Centro del grafo: " + gd.centroDelGrafo().getEtiqueta());
     }
 }
